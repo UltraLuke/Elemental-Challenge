@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Jump
+  - Health
+  - Time
+  - Special
+  - Fast Shoots
+  - Invincibility
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - Player 1
+  - Player 2
+  - Melee 1
+  - Melee 2
+  - Enemy
+  - Bullet 1
+  - Enemy Bullet
+  - Hazard
+  - Goal
+  - Bounds
+  - Limiter
+  - Spin Attack
+  - Stomp
+  - Enemy Limiter
+  - Bullet 2
+  - Platform Dust
+  - Platform
+  - Outer-limit Enemy
+  - Hard Blocks
+  - Hazard Limiter
+  - Powerups
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
