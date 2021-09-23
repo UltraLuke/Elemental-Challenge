@@ -43,6 +43,10 @@ MonoBehaviour:
   - RPCPlayerSelection
   - RPCPlSel
   - RPCPlayerDisconnected
+  - UpdateCharacter
+  - RPCUpdateCharacter
+  - RPCUpdateCheckMark
+  - RPCReady
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
