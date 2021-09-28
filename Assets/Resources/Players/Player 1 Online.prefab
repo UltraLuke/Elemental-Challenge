@@ -566,8 +566,8 @@ GameObject:
   - component: {fileID: 2447998828870807545}
   - component: {fileID: 2447998828870807546}
   - component: {fileID: 2447998828870807547}
-  - component: {fileID: 2447998828870807548}
-  - component: {fileID: 2447998828870807549}
+  - component: {fileID: -9016177422987315962}
+  - component: {fileID: 6642949173954336104}
   - component: {fileID: 2536161154986464331}
   - component: {fileID: -7192432271167051877}
   - component: {fileID: 1938117637071413789}
@@ -809,7 +809,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
---- !u!114 &2447998828870807548
+--- !u!114 &-9016177422987315962
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -818,13 +818,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2447998828870807524}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e3f77bbc19a0084dace3f04e04e910c, type: 3}
+  m_Script: {fileID: 11500000, guid: c7dc5d7363bfdba4ebed6ff0014d1d65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerBody: {fileID: 0}
   specialActive: 0
   isPaused: 0
---- !u!114 &2447998828870807549
+--- !u!114 &6642949173954336104
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -833,7 +833,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2447998828870807524}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92988b75c67433e4a914dd725c52c7be, type: 3}
+  m_Script: {fileID: 11500000, guid: 70a676285c971ca42a742b9dd04d0f05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   die: {fileID: 1686139434165512, guid: d07176b747e8708459974a25909a8441, type: 3}
@@ -871,6 +871,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
+  - {fileID: -9016177422987315962}
   - {fileID: -7192432271167051877}
   - {fileID: 1938117637071413789}
   sceneViewId: 0
@@ -925,20 +926,20 @@ MonoBehaviour:
   ShowParameterInspector: 1
   m_SynchronizeParameters:
   - Type: 1
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: velocityY
   - Type: 1
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: velocityX
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: attacking
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: flying
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: shooting
   m_SynchronizeLayers:
-  - SynchronizeType: 0
+  - SynchronizeType: 2
     LayerIndex: 0

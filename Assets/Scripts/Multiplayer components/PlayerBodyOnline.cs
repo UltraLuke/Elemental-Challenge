@@ -65,6 +65,13 @@ public class PlayerBodyOnline : MonoBehaviourPun
 
     public bool winState;
 
+    public void InitialSettings(GameObject bulletImage)
+    {
+        this.bulletImage = bulletImage;
+        this.bulletImage.SetActive(false);
+
+    }
+
     void Start ()
     {
         if (!photonView.IsMine) return;
@@ -104,7 +111,6 @@ public class PlayerBodyOnline : MonoBehaviourPun
         winState = false;
         multiShootTime = 0f;
 
-        bulletImage.SetActive(false);
 
         invincibilityTimer = 0f;
     }
@@ -131,7 +137,8 @@ public class PlayerBodyOnline : MonoBehaviourPun
         }
         else
         {
-            bulletImage.SetActive(false);
+            if(bulletImage != null)
+                bulletImage.SetActive(false);
         }
 
         //1 = Cooldown de disparo. 2 = Timer de detencion
@@ -518,7 +525,7 @@ public class PlayerBodyOnline : MonoBehaviourPun
             Destroy(collision.gameObject);
             shootTimer = 0f;
             multiShootTime = 10f;
-            bulletImage.SetActive(true);
+            if(bulletImage != null) bulletImage.SetActive(true);
             src.PlayOneShot(Camera.main.GetComponent<SoundManager>().Sound(11));
         }
 

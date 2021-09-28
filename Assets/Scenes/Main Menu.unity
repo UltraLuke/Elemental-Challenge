@@ -5921,7 +5921,6 @@ GameObject:
   - component: {fileID: 1729718940}
   - component: {fileID: 1729718939}
   - component: {fileID: 1729718941}
-  - component: {fileID: 1729718942}
   m_Layer: 5
   m_Name: -- OnlineComponents --
   m_TagString: Untagged
@@ -6004,23 +6003,6 @@ MonoBehaviour:
   sceneViewId: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &1729718942
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1729718937}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8dbb20a0e7570d44c91832334b3a7f1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characters: []
-  leftArrow: {fileID: 0}
-  rightArrow: {fileID: 0}
-  youIndicator: {fileID: 0}
-  checkMark: {fileID: 0}
 --- !u!1 &1731654397
 GameObject:
   m_ObjectHideFlags: 0

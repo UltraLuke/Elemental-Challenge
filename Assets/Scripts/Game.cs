@@ -94,18 +94,6 @@ public class Game : MonoBehaviour {
     public bool twoPlayersGame;
     private bool lockGoal;
     public static bool paused;
-
-    /*-----Transition----*/
-    /*public float sceneTransition;
-	public float currentTransition;
-	public bool transEnabled;
-	public string siguienteNivel;*/
-
-    /*-------Lava--------*/
-    //public bool isLastLevel;
-    //public static bool twoPlayersGame;
-
-
     void Start ()
 	{
         if (SceneManager.GetActiveScene().buildIndex == 1)
@@ -140,10 +128,7 @@ public class Game : MonoBehaviour {
 
         src = GetComponent<AudioSource>();
 
-        //PlayerSelection(true);
-        //transEnabled = false;
         currentTime = levelTime;
-		//currentTransition = sceneTransition;
 		timeUp.SetActive(false);
 
         for (int i = 0; i < winText.Length; i++)
@@ -172,21 +157,6 @@ public class Game : MonoBehaviour {
 
         if (!lockGoal)
             Winner();
-
-        /*if(!isLastLevel)
-		{
-			LevelTime();
-		}
-
-		if(!transEnabled)
-		{
-			Winner();
-			GameOver();
-		}
-		else
-		{
-			Transition();
-		}*/
     }
 
     public void MainSettings(bool active)
@@ -264,16 +234,8 @@ public class Game : MonoBehaviour {
             currentTime -= Time.deltaTime;
         }
 
-		/*if(currentTime >= -5)
-			currentTime -= Time.deltaTime;*/
-
-		if(currentTime <= 0 /*&& currentTime >= -5*/)
+		if(currentTime <= 0)
 			timeUp.SetActive(true);
-
-		/*else if(currentTime < -5)
-		{
-			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-		}*/
 	}
 
     public void Pause()
@@ -284,7 +246,6 @@ public class Game : MonoBehaviour {
             player[0].GetComponent<Player1>().isPaused = false;
             player[1].GetComponent<Player2>().isPaused = false;
             Time.timeScale = 1f;
-            //paused = false;
             Camera.main.GetComponent<SoundManager>().SetAudioSnapshot(1);
 
         }
@@ -294,7 +255,6 @@ public class Game : MonoBehaviour {
             player[0].GetComponent<Player1>().isPaused = true;
             player[1].GetComponent<Player2>().isPaused = true;
             Time.timeScale = 0f;
-            //paused = true;
             Camera.main.GetComponent<SoundManager>().SetAudioSnapshot(2);
         }
     }
@@ -329,8 +289,6 @@ public class Game : MonoBehaviour {
         if ((twoPlayersGame && (!player[0].gameObject.activeSelf && !player[1].gameObject.activeSelf)) || (!twoPlayersGame && !player[0].gameObject.activeSelf))
 		{
 			gameOverText.SetActive(true);
-			//transEnabled = true;
-	        //siguienteNivel = "Main Menu";
 		}
 	}
 
@@ -344,22 +302,4 @@ public class Game : MonoBehaviour {
         Pause();
         SceneManager.LoadScene("Main Menu");
     }
-
-    /*public void Transition()
-	{
-		currentTransition -= Time.deltaTime;
-
-		if(currentTransition <= 0)
-		{
-			SceneManager.LoadScene(siguienteNivel);
-		}
-	}*/
-
-    /*public void PlayerSelection(bool selection)
-	{
-		if(selection)
-			twoPlayersGame = true;
-		else
-			twoPlayersGame = false;
-	}*/
 }

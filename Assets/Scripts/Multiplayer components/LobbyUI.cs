@@ -28,6 +28,24 @@ public class LobbyUI : MonoBehaviourPunCallbacks
         PhotonNetwork.LeaveRoom();
     }
 
+    public void BtnJoinRoom()
+    {
+        if (lobbyInputField.text == "")
+            errorMessage.enabled = true;
+        else
+        {
+            PhotonNetwork.JoinRoom(lobbyInputField.text);
+            onlineLobbyScreen.SetActive(false);
+            searchingPlayersScreen.SetActive(true);
+            errorMessage.enabled = false;
+        }
+    }
+
+    public void StartGame()
+    {
+        PhotonNetwork.LoadLevel("Tutorial Online");
+    }
+
     public override void OnCreatedRoom()
     {
         Debug.Log("Room created");
@@ -49,18 +67,6 @@ public class LobbyUI : MonoBehaviourPunCallbacks
         Debug.Log("Failed create room " + returnCode + " Message: " + message);
     }
 
-    public void BtnJoinRoom()
-    {
-        if (lobbyInputField.text == "")
-            errorMessage.enabled = true;
-        else
-        {
-            PhotonNetwork.JoinRoom(lobbyInputField.text);
-            onlineLobbyScreen.SetActive(false);
-            searchingPlayersScreen.SetActive(true);
-            errorMessage.enabled = false;
-        }
-    }
 
     public override void OnJoinedRoom()
     {

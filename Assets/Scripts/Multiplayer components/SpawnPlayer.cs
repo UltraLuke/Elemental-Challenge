@@ -1,13 +1,21 @@
 ﻿using UnityEngine;
 using Photon.Pun;
+using System;
 
-public class SpawnPlayer : MonoBehaviour
+public class SpawnPlayer : MonoBehaviourPunCallbacks
 {
     //public MainCamera mainCamera;
-    public string playerPrefName;
+    //public string[] playerPrefNames;
 
-    private void Start()
+    private GameObject SpawnCharacter(string character)
     {
-        PhotonNetwork.Instantiate("Players/" + playerPrefName, transform.position, Quaternion.identity);
+        if (photonView.IsMine)
+        {
+            return PhotonNetwork.Instantiate("Players/" + character, transform.position, Quaternion.identity);
+        }
+        else
+        {
+            return null;
+        }
     }
 }

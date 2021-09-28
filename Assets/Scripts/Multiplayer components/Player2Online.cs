@@ -15,7 +15,6 @@ public class Player2Online : MonoBehaviourPun, IPunObservable
 
     public bool specialActive;
     public bool isPaused;
-    public MainCamera mainCamera;
 
     void Start ()
 	{
@@ -23,7 +22,6 @@ public class Player2Online : MonoBehaviourPun, IPunObservable
 
         playerBody = GetComponent<PlayerBody>();
         isPaused = false;
-        mainCamera.mainPlayer = gameObject;
     }
 
 	void Update ()

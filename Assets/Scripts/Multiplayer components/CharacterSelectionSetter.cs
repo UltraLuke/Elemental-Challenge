@@ -11,6 +11,7 @@ public class CharacterSelectionSetter : MonoBehaviourPunCallbacks
 
     int _playersReady;
     int _maxPlayers = 2;
+    int[] _charactersSelected = new int[2];
 
     public void OnEnable()
     {
@@ -43,18 +44,26 @@ public class CharacterSelectionSetter : MonoBehaviourPunCallbacks
         }
     }
 
-    void PlayerReady(bool ready)
+    void PlayerReady(bool ready, int character, bool master)
     {
+        int playerNum = master ? 0 : 1;
+
         if (!ready)
         {
             _playersReady = _playersReady <= 0 ? 0 : _playersReady - 1;
             return;
         }
+        else
+        {
+            _playersReady++;
+            _charactersSelected[playerNum] = character;
+        }
 
-        _playersReady++;
         if(_playersReady == _maxPlayers && PhotonNetwork.IsMasterClient)
         {
+            PlayerSettings.charactersSelected = _charactersSelected;
             Debug.Log("Empezar el juego");
+            FindObjectOfType<LobbyUI>().StartGame();
             //EMPEZAR JUEGO
         }
     }

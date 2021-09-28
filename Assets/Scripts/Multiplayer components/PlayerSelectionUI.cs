@@ -18,7 +18,7 @@ public class PlayerSelectionUI : MonoBehaviourPunCallbacks
     bool _myCharacter;
     bool _isReady;
 
-    Action<bool> _readySetter;
+    Action<bool, int, bool> _readySetter;
 
     public bool IsReady { get => _isReady; }
 
@@ -31,7 +31,7 @@ public class PlayerSelectionUI : MonoBehaviourPunCallbacks
             _updateUI = false;
         }
     }
-    public void StartWithCharacter(int character, Action<bool> readySetter)
+    public void StartWithCharacter(int character, Action<bool,int,bool> readySetter)
     {
         _maxIndex = characters.Length - 1;
         _currentIndex = character;
@@ -67,7 +67,7 @@ public class PlayerSelectionUI : MonoBehaviourPunCallbacks
         _readySetter = readySetter;
     }
 
-    public void DisableSelector(Action<bool> readySetter)
+    public void DisableSelector(Action<bool, int, bool> readySetter)
     {
         leftArrow.SetActive(false);
         rightArrow.SetActive(false);
@@ -147,7 +147,7 @@ public class PlayerSelectionUI : MonoBehaviourPunCallbacks
     [PunRPC]
     void RPCReady(bool state)
     {
-        _readySetter(state);
+        _readySetter(state, _currentIndex, PhotonNetwork.IsMasterClient);
         checkMark.SetActive(state);
     }
 

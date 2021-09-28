@@ -5,7 +5,7 @@ using Photon.Pun;
 
 public class Player1Online : MonoBehaviourPun, IPunObservable
 {
-    public PlayerBody playerBody;
+    public PlayerBodyOnline playerBody;
     private string axis = "Horizontal1";
     private string axisJoy = "HorizontalStick1";
     private string jump = "Jump1";
@@ -14,15 +14,13 @@ public class Player1Online : MonoBehaviourPun, IPunObservable
 
     public bool specialActive;
     public bool isPaused;
-    public MainCamera mainCamera;
 
     void Start()
     {
         if (!photonView.IsMine) return;
 
-        playerBody = GetComponent<PlayerBody>();
+        playerBody = GetComponent<PlayerBodyOnline>();
         isPaused = false;
-        mainCamera.mainPlayer = gameObject;
     }
 
     void Update()
