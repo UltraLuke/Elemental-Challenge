@@ -45,9 +45,9 @@ public class MainCamera : MonoBehaviour {
 	void Update ()
 	{
 		Vector3 focusPoint;
-        //differenceY = Mathf.Abs(mainPlayer.transform.position.y - secPlayer.transform.position.y);
+		//differenceY = Mathf.Abs(mainPlayer.transform.position.y - secPlayer.transform.position.y);
 
-        /*if(Game.player2Game)
+		/*if(Game.player2Game)
 		{
 			if(secPlayer.gameObject.activeSelf && mainPlayer.gameObject.activeSelf)
 			{
@@ -73,6 +73,7 @@ public class MainCamera : MonoBehaviour {
 			focusPoint = mainPlayer.transform.position;
 		}*/
 
+		if (mainPlayer == null) return;
         focusPoint = mainPlayer.transform.position;
 
        /* if (Game.player2Game)

@@ -18,25 +18,73 @@ public class GameOnline : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        for (int i = 0; i < spawners.Length; i++)
+        //for (int i = 0; i < spawners.Length; i++)
+        //{
+        //    if (PlayerSettings.charactersSelected[i] == 0)
+        //    {
+        //        playerPrefabNames[i] = "Player 1 Online";
+        //    }
+        //    else if (PlayerSettings.charactersSelected[i] == 1)
+        //    {
+        //        playerPrefabNames[i] = "Player 2 Online";
+        //    }
+
+        //    GameObject player;
+
+        //    if (PhotonNetwork.IsMasterClient)
+        //    {
+        //        player = PhotonNetwork.Instantiate("Players/" + playerPrefabNames[i], spawners[i].position, Quaternion.identity);
+        //    }
+        //    else
+        //    {
+        //        player = PhotonNetwork.Instantiate("Players/" + playerPrefabNames[i], spawners[i].position, Quaternion.identity);
+        //    }
+
+        //    player.GetComponent<PlayerBodyOnline>().InitialSettings(bulletImages[i]);
+
+        //    if (photonView.IsMine)
+        //    {
+        //        cmra.mainPlayer = player;
+        //    }
+        //}
+
+        GameObject player;
+
+        if (PhotonNetwork.IsMasterClient)
         {
-            if (PlayerSettings.charactersSelected[i] == 0)
+            if (PlayerSettings.charactersSelected[0] == 0)
             {
-                playerPrefabNames[i] = "Player 1 Online";
+                playerPrefabNames[0] = "Player 1 Online";
             }
-            else if (PlayerSettings.charactersSelected[i] == 1)
+            else if (PlayerSettings.charactersSelected[0] == 1)
             {
-                playerPrefabNames[i] = "Player 2 Online";
+                playerPrefabNames[0] = "Player 2 Online";
             }
 
-            var player = PhotonNetwork.Instantiate("Players/" + playerPrefabNames[i], spawners[i].position, Quaternion.identity);
-            player.GetComponent<PlayerBodyOnline>().InitialSettings(bulletImages[i]);
+            player = PhotonNetwork.Instantiate("Players/" + playerPrefabNames[0], spawners[0].position, Quaternion.identity);
 
-            if (photonView.IsMine)
-            {
-                cmra.mainPlayer = player;
-            }
+            player.GetComponent<PlayerBodyOnline>().InitialSettings(bulletImages[0]);
+
         }
+        else
+        {
+            if (PlayerSettings.charactersSelected[1] == 0)
+            {
+                playerPrefabNames[1] = "Player 1 Online";
+            }
+            else if (PlayerSettings.charactersSelected[1] == 1)
+            {
+                playerPrefabNames[1] = "Player 2 Online";
+            }
+            player = PhotonNetwork.Instantiate("Players/" + playerPrefabNames[1], spawners[1].position, Quaternion.identity);
+
+            player.GetComponent<PlayerBodyOnline>().InitialSettings(bulletImages[1]);
+        }
+
+        //if (photonView.IsMine)
+        //{
+        //    cmra.mainPlayer = player;
+        //}
     }
 
 

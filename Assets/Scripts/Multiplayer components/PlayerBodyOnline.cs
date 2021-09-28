@@ -46,9 +46,9 @@ public class PlayerBodyOnline : MonoBehaviourPun
     //--------------Special--------------
     public float specialTimer;
     public static float specialSetTime = 10f;
-    private Collider2D physicsSelf;
-    private Collider2D physicsStomp;
-    private Collider2D physicsSpin;
+    public Collider2D physicsSelf;
+    public Collider2D physicsStomp;
+    public Collider2D physicsSpin;
 
     private string flyAnimation;
 
@@ -63,6 +63,9 @@ public class PlayerBodyOnline : MonoBehaviourPun
     private float invincibilityTimer;
     private GameObject shield;
 
+    //--------Camera-----------
+    MainCamera mainCamera;
+
     public bool winState;
 
     public void InitialSettings(GameObject bulletImage)
@@ -71,9 +74,30 @@ public class PlayerBodyOnline : MonoBehaviourPun
         this.bulletImage.SetActive(false);
 
     }
+    private void Awake()
+    {
+        if (!photonView.IsMine) return;
 
+        rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        src = GetComponent<AudioSource>();
+        cNormal = GetComponent<SpriteRenderer>();
+        physicsSelf = GetComponent<Collider2D>();
+        physicMelee = transform.GetChild(0).GetComponent<Collider2D>();
+        physicsStomp = transform.GetChild(1).GetComponent<Collider2D>();
+
+        shield = transform.GetChild(2).gameObject;
+        shield.SetActive(false);
+
+        if (playerLayer == 8)
+            physicsSpin = transform.GetChild(3).GetComponent<Collider2D>();
+
+        mainCamera = Camera.main.GetComponent<MainCamera>();
+        mainCamera.mainPlayer = gameObject;
+    }
     void Start ()
     {
+
         if (!photonView.IsMine) return;
 
         if (Game.diffLevel == 2)
@@ -86,20 +110,6 @@ public class PlayerBodyOnline : MonoBehaviourPun
         }
 
         playerLayer = gameObject.layer;
-        rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
-        src = GetComponent<AudioSource>();
-        cNormal = GetComponent<SpriteRenderer>();
-
-        physicsSelf = GetComponent<Collider2D>();
-        physicMelee = transform.GetChild(0).GetComponent<Collider2D>();
-        physicsStomp = transform.GetChild(1).GetComponent<Collider2D>();
-
-        shield = transform.GetChild(2).gameObject;
-        shield.SetActive(false);
-
-        if (playerLayer == 8)
-            physicsSpin = transform.GetChild(3).GetComponent<Collider2D>();
 
         specialTimer = 0f;
         breathe = breatheTime;
@@ -111,8 +121,8 @@ public class PlayerBodyOnline : MonoBehaviourPun
         winState = false;
         multiShootTime = 0f;
 
-
         invincibilityTimer = 0f;
+
     }
 
     void Update()
@@ -176,7 +186,7 @@ public class PlayerBodyOnline : MonoBehaviourPun
     /*---------------------------------Move---------------------------------*/
     public void Move(float hAxis)
     {
-        Vector2 moveSpeed;
+        Vector2 moveSpeed = new Vector2();
 
         moveSpeed.x = hAxis * speed;
         moveSpeed.y = rb.velocity.y;

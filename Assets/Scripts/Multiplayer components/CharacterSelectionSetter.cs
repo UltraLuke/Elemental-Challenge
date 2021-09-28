@@ -59,7 +59,7 @@ public class CharacterSelectionSetter : MonoBehaviourPunCallbacks
             _charactersSelected[playerNum] = character;
         }
 
-        if(_playersReady == _maxPlayers && PhotonNetwork.IsMasterClient)
+        if(_playersReady == _maxPlayers)
         {
             PlayerSettings.charactersSelected = _charactersSelected;
             Debug.Log("Empezar el juego");
