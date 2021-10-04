@@ -7,7 +7,7 @@ using Photon.Pun;
 
 public class GameOnline : MonoBehaviourPunCallbacks
 {
-    private int index;
+    private int index = 2;
 
     [Header("Players")]
     public Transform[] spawners;
@@ -40,7 +40,7 @@ public class GameOnline : MonoBehaviourPunCallbacks
     [Header("Health")]
     public GameObject[] textHealthObject;
     private Text[] textHealth = new Text[2];
-    private int[] hPPoints = new int[2];
+    public int[] hPPoints = new int[2];
 
     [Space]
 
@@ -48,6 +48,12 @@ public class GameOnline : MonoBehaviourPunCallbacks
     public GameObject[] scoreTextObject;
     private Text[] scoreText = new Text[2];
     public static int[] score = new int[2];
+
+    public static int diffLevel;
+    private void Awake()
+    {
+        diffLevel = 0;
+    }
 
     private void Start()
     {
@@ -65,9 +71,8 @@ public class GameOnline : MonoBehaviourPunCallbacks
             }
 
             player = PhotonNetwork.Instantiate("Players/" + playerPrefabNames[0], spawners[0].position, Quaternion.identity);
-
-            player.GetComponent<PlayerBodyOnline>().InitialSettings(bulletImages[0], Winner, GameOver);
-
+            this.player[0] = player.GetComponent<PlayerBodyOnline>();
+            this.player[0].InitialSettings(bulletImages[0], Winner, GameOver);
         }
         else
         {
@@ -79,10 +84,13 @@ public class GameOnline : MonoBehaviourPunCallbacks
             {
                 playerPrefabNames[1] = "Player 2 Online";
             }
-            player = PhotonNetwork.Instantiate("Players/" + playerPrefabNames[1], spawners[1].position, Quaternion.identity);
 
-            player.GetComponent<PlayerBodyOnline>().InitialSettings(bulletImages[1], Winner, GameOver);
+            player = PhotonNetwork.Instantiate("Players/" + playerPrefabNames[1], spawners[1].position, Quaternion.identity);
+            this.player[1] = player.GetComponent<PlayerBodyOnline>();
+            this.player[1].InitialSettings(bulletImages[1], Winner, GameOver);
         }
+
+        MainSettings(true);
 
         if (SceneManager.GetActiveScene().name == "Tutorial Online" || SceneManager.GetActiveScene().name == "Tutorial")
         {
@@ -97,8 +105,6 @@ public class GameOnline : MonoBehaviourPunCallbacks
         {
             winText[i].SetActive(false);
         }
-
-        //MainSettings(true);
     }
 
     //[Space]
@@ -148,7 +154,6 @@ public class GameOnline : MonoBehaviourPunCallbacks
     //[Space]
 
     //[Header("Difficulty Level")]
-    //public static int diffLevel;
 
     //[Space]
 
@@ -199,15 +204,18 @@ public class GameOnline : MonoBehaviourPunCallbacks
 
     public void MainSettings(bool active)
     {
-        PlayerData(0, true);
-        PlayerData(1, active);
+        PlayerData(0, PhotonNetwork.IsMasterClient);
+        PlayerData(1, !PhotonNetwork.IsMasterClient);
     }
 
     public void PlayerData(int playerIndex, bool hideOrShow)
     {
-        //player[playerIndex].gameObject.SetActive(hideOrShow);
         textHealthObject[playerIndex].SetActive(hideOrShow);
+        textHealth[playerIndex] = textHealthObject[playerIndex].GetComponent<Text>();
+
         scoreTextObject[playerIndex].SetActive(hideOrShow);
+        scoreText[playerIndex] = scoreTextObject[playerIndex].GetComponent<Text>();
+
         //shootBarObject[playerIndex].SetActive(hideOrShow);
         //breathBarObject[playerIndex].SetActive(hideOrShow);
         //specialBarObject[playerIndex].SetActive(hideOrShow);
@@ -236,20 +244,7 @@ public class GameOnline : MonoBehaviourPunCallbacks
 
     public void ShowData()
     {
-        for (int i = 0; i < index; i++)
-        {
-            hPPoints[i] = player[i].hP;
-            textHealth[i] = TextHP(hPPoints[i], textHealth[i]);
-            scoreText[i] = TextScore(score[i], scoreText[i]);
-
-            //currFireTime[i] = player[i].GetComponent<PlayerBody>().shootTimer;
-            //currBreatheTime[i] = player[i].GetComponent<PlayerBody>().breathe;
-            //currSpecialTime[i] = player[i].GetComponent<PlayerBody>().specialTimer;
-
-            //fireBar[i].UpdateBar(currFireTime[i], initFireTime);
-            //breathBar[i].UpdateBar(currBreatheTime[i], initBreatheTime);
-            //specialBar[i].UpdateBar(currSpecialTime[i], initSpecialTime);
-        }
+        photonView.RPC("RPCUpdateValues", RpcTarget.All);
     }
 
     #region Unused methods
@@ -334,6 +329,26 @@ public class GameOnline : MonoBehaviourPunCallbacks
         if (isMaster == PhotonNetwork.IsMasterClient)
         {
             gameOverText.SetActive(true);
+        }
+    }
+    [PunRPC]
+    void RPCUpdateValues()
+    {
+        for (int i = 0; i < index; i++)
+        {
+            if(player[i] != null)
+                hPPoints[i] = player[i].hP;
+
+            textHealth[i] = TextHP(hPPoints[i], textHealth[i]);
+            scoreText[i] = TextScore(score[i], scoreText[i]);
+
+            //currFireTime[i] = player[i].GetComponent<PlayerBody>().shootTimer;
+            //currBreatheTime[i] = player[i].GetComponent<PlayerBody>().breathe;
+            //currSpecialTime[i] = player[i].GetComponent<PlayerBody>().specialTimer;
+
+            //fireBar[i].UpdateBar(currFireTime[i], initFireTime);
+            //breathBar[i].UpdateBar(currBreatheTime[i], initBreatheTime);
+            //specialBar[i].UpdateBar(currSpecialTime[i], initSpecialTime);
         }
     }
     #endregion

@@ -109,7 +109,7 @@ public class PlayerBodyOnline : MonoBehaviourPun, IPlayerBodyCallback
 
         if (!photonView.IsMine) return;
 
-        if (Game.diffLevel == 2)
+        if (GameOnline.diffLevel == 2)
         {
             hP = 1;
         }
