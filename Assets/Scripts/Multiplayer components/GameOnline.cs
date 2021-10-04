@@ -7,6 +7,7 @@ using Photon.Pun;
 
 public class GameOnline : MonoBehaviourPunCallbacks
 {
+    private int index;
 
     [Header("Players")]
     public Transform[] spawners;
@@ -29,41 +30,27 @@ public class GameOnline : MonoBehaviourPunCallbacks
     public GameObject[] winText;
     private bool _lockGoal = false;
 
+    [Space]
+
+    [Header("Game Over")]
+    public GameObject gameOverText;
+
+    [Space]
+
+    [Header("Health")]
+    public GameObject[] textHealthObject;
+    private Text[] textHealth = new Text[2];
+    private int[] hPPoints = new int[2];
+
+    [Space]
+
+    [Header("Score")]
+    public GameObject[] scoreTextObject;
+    private Text[] scoreText = new Text[2];
+    public static int[] score = new int[2];
+
     private void Start()
     {
-        //for (int i = 0; i < spawners.Length; i++)
-        //{
-        //    if (PlayerSettings.charactersSelected[i] == 0)
-        //    {
-        //        playerPrefabNames[i] = "Player 1 Online";
-        //    }
-        //    else if (PlayerSettings.charactersSelected[i] == 1)
-        //    {
-        //        playerPrefabNames[i] = "Player 2 Online";
-        //    }
-
-        //    GameObject player;
-
-        //    if (PhotonNetwork.IsMasterClient)
-        //    {
-        //        player = PhotonNetwork.Instantiate("Players/" + playerPrefabNames[i], spawners[i].position, Quaternion.identity);
-        //    }
-        //    else
-        //    {
-        //        player = PhotonNetwork.Instantiate("Players/" + playerPrefabNames[i], spawners[i].position, Quaternion.identity);
-        //    }
-
-        //    player.GetComponent<PlayerBodyOnline>().InitialSettings(bulletImages[i]);
-
-        //    if (photonView.IsMine)
-        //    {
-        //        cmra.mainPlayer = player;
-        //    }
-        //}
-
-        Debug.Log(PlayerSettings.charactersSelected[0]);
-        Debug.Log(PlayerSettings.charactersSelected[1]);
-
         GameObject player;
 
         if (PhotonNetwork.IsMasterClient)
@@ -79,7 +66,7 @@ public class GameOnline : MonoBehaviourPunCallbacks
 
             player = PhotonNetwork.Instantiate("Players/" + playerPrefabNames[0], spawners[0].position, Quaternion.identity);
 
-            player.GetComponent<PlayerBodyOnline>().InitialSettings(bulletImages[0], Winner);
+            player.GetComponent<PlayerBodyOnline>().InitialSettings(bulletImages[0], Winner, GameOver);
 
         }
         else
@@ -94,34 +81,25 @@ public class GameOnline : MonoBehaviourPunCallbacks
             }
             player = PhotonNetwork.Instantiate("Players/" + playerPrefabNames[1], spawners[1].position, Quaternion.identity);
 
-            player.GetComponent<PlayerBodyOnline>().InitialSettings(bulletImages[1], Winner);
+            player.GetComponent<PlayerBodyOnline>().InitialSettings(bulletImages[1], Winner, GameOver);
         }
 
-        //if (photonView.IsMine)
-        //{
-        //    cmra.mainPlayer = player;
-        //}
+        if (SceneManager.GetActiveScene().name == "Tutorial Online" || SceneManager.GetActiveScene().name == "Tutorial")
+        {
+            score[0] = 0;
+            score[1] = 0;
+        }
+
+        gameOverText.SetActive(false);
+        _lockGoal = false;
+
+        for (int i = 0; i < winText.Length; i++)
+        {
+            winText[i].SetActive(false);
+        }
+
+        //MainSettings(true);
     }
-
-
-    //private int index;
-
-    //[Header("Players")]
-    //public GameObject[] player;
-
-    //[Space]
-
-    //[Header("Health")]
-    //public GameObject[] textHealthObject;
-    //private Text[] textHealth = new Text[2];
-    //private int[] hPPoints = new int[2];
-
-    //[Space]
-
-    //[Header("Score")]
-    //public GameObject[] scoreTextObject;
-    //private Text[] scoreText = new Text[2];
-    //public static int[] score = new int[2];
 
     //[Space]
 
@@ -158,21 +136,6 @@ public class GameOnline : MonoBehaviourPunCallbacks
 
     //[Space]
 
-    //[Header("Win Text")]
-    //public GameObject[] winText;
-
-    //[Space]
-
-    //[Header("Cameras")]
-    //public GameObject[] cmra;
-
-    //[Space]
-
-    //[Header("Game Over")]
-    //public GameObject gameOverText;
-
-    //[Space]
-
     //[Header("Sounds")]
     //private AudioSource src;
 
@@ -190,56 +153,29 @@ public class GameOnline : MonoBehaviourPunCallbacks
     //[Space]
 
     //public bool twoPlayersGame;
-    //private bool lockGoal;
     //public static bool paused;
+
+
+
     //void Start()
     //{
-    //    if (SceneManager.GetActiveScene().buildIndex == 1)
-    //    {
-    //        twoPlayersGame = MainMenu.enable2PGame;
-    //        score[0] = 0;
-    //        score[1] = 0;
-    //    }
 
     //    pauseUI.SetActive(false);
 
-    //    for (int i = 0; i < player.Length; i++)
-    //    {
-    //        textHealth[i] = textHealthObject[i].GetComponent<Text>();
-    //        scoreText[i] = scoreTextObject[i].GetComponent<Text>();
-
-    //        fireBar[i] = shootBarObject[i].GetComponent<SimpleHealthBar>();
-    //        breathBar[i] = breathBarObject[i].GetComponent<SimpleHealthBar>();
-    //        specialBar[i] = specialBarObject[i].GetComponent<SimpleHealthBar>();
-
-    //        currFireTime[i] = player[i].GetComponent<PlayerBody>().shootTimer;
-    //        currBreatheTime[i] = player[i].GetComponent<PlayerBody>().breathe;
-    //        currSpecialTime[i] = player[i].GetComponent<PlayerBody>().specialTimer;
-
-    //        hPPoints[i] = player[i].GetComponent<PlayerBody>().hP;
-    //    }
     //    initFireTime = PlayerBody.shootCd;
     //    initBreatheTime = PlayerBody.breatheTime;
     //    initSpecialTime = PlayerBody.specialSetTime;
 
-    //    MainSettings(twoPlayersGame);
 
     //    src = GetComponent<AudioSource>();
 
     //    currentTime = levelTime;
     //    timeUp.SetActive(false);
 
-    //    for (int i = 0; i < winText.Length; i++)
-    //    {
-    //        winText[i].SetActive(false);
-    //    }
-
-    //    gameOverText.SetActive(false);
-
-    //    lockGoal = false;
-
     //    paused = false;
     //}
+
+
 
     void Update()
     {
@@ -248,80 +184,75 @@ public class GameOnline : MonoBehaviourPunCallbacks
         //    Pause();
         //}
 
-        //ShowData();
+        ShowData();
         //LevelTime();
-
-        //GameOver();
-
-        //if (!lockGoal)
-        //    Winner();
     }
 
-    //public void MainSettings(bool active)
-    //{
-    //    PlayerData(0, true);
-    //    PlayerData(1, active);
+    public void Winner(bool isMaster)
+    {
+        photonView.RPC("RPCWinner", RpcTarget.All, isMaster);
+    }
+    public void GameOver(bool isMaster)
+    {
+        photonView.RPC("RPCGameOver", RpcTarget.All, isMaster);
+    }
 
-    //    if (active)
-    //        index = 2;
-    //    else
-    //        index = 1;
+    public void MainSettings(bool active)
+    {
+        PlayerData(0, true);
+        PlayerData(1, active);
+    }
 
-    //    cmra[0].SetActive(active);
-    //    cmra[1].SetActive(active);
+    public void PlayerData(int playerIndex, bool hideOrShow)
+    {
+        //player[playerIndex].gameObject.SetActive(hideOrShow);
+        textHealthObject[playerIndex].SetActive(hideOrShow);
+        scoreTextObject[playerIndex].SetActive(hideOrShow);
+        //shootBarObject[playerIndex].SetActive(hideOrShow);
+        //breathBarObject[playerIndex].SetActive(hideOrShow);
+        //specialBarObject[playerIndex].SetActive(hideOrShow);
+    }
 
-    //    divider.SetActive(active);
-    //}
+    public Text TextHP(int playerLife, Text pHP)
+    {
+        if (playerLife > 0)
+        {
+            pHP.text = "Life: " + playerLife;
+        }
+        else
+        {
+            pHP.text = "Dead";
+        }
 
-    //public void PlayerData(int playerIndex, bool hideOrShow)
-    //{
-    //    player[playerIndex].SetActive(hideOrShow);
-    //    textHealthObject[playerIndex].SetActive(hideOrShow);
-    //    scoreTextObject[playerIndex].SetActive(hideOrShow);
-    //    shootBarObject[playerIndex].SetActive(hideOrShow);
-    //    breathBarObject[playerIndex].SetActive(hideOrShow);
-    //    specialBarObject[playerIndex].SetActive(hideOrShow);
-    //}
+        return pHP;
+    }
 
-    //public Text TextHP(int playerLife, Text pHP)
-    //{
-    //    if (playerLife > 0)
-    //    {
-    //        pHP.text = "Life: " + playerLife;
-    //    }
-    //    else
-    //    {
-    //        pHP.text = "Dead";
-    //    }
+    public Text TextScore(int scorePoints, Text pointsText)
+    {
+        pointsText.text = "Score: " + scorePoints;
 
-    //    return pHP;
-    //}
+        return pointsText;
+    }
 
-    //public Text TextScore(int scorePoints, Text pointsText)
-    //{
-    //    pointsText.text = "Score: " + scorePoints;
+    public void ShowData()
+    {
+        for (int i = 0; i < index; i++)
+        {
+            hPPoints[i] = player[i].hP;
+            textHealth[i] = TextHP(hPPoints[i], textHealth[i]);
+            scoreText[i] = TextScore(score[i], scoreText[i]);
 
-    //    return pointsText;
-    //}
+            //currFireTime[i] = player[i].GetComponent<PlayerBody>().shootTimer;
+            //currBreatheTime[i] = player[i].GetComponent<PlayerBody>().breathe;
+            //currSpecialTime[i] = player[i].GetComponent<PlayerBody>().specialTimer;
 
-    //public void ShowData()
-    //{
-    //    for (int i = 0; i < index; i++)
-    //    {
-    //        hPPoints[i] = player[i].GetComponent<PlayerBody>().hP;
-    //        textHealth[i] = TextHP(hPPoints[i], textHealth[i]);
-    //        scoreText[i] = TextScore(score[i], scoreText[i]);
+            //fireBar[i].UpdateBar(currFireTime[i], initFireTime);
+            //breathBar[i].UpdateBar(currBreatheTime[i], initBreatheTime);
+            //specialBar[i].UpdateBar(currSpecialTime[i], initSpecialTime);
+        }
+    }
 
-    //        currFireTime[i] = player[i].GetComponent<PlayerBody>().shootTimer;
-    //        currBreatheTime[i] = player[i].GetComponent<PlayerBody>().breathe;
-    //        currSpecialTime[i] = player[i].GetComponent<PlayerBody>().specialTimer;
-
-    //        fireBar[i].UpdateBar(currFireTime[i], initFireTime);
-    //        breathBar[i].UpdateBar(currBreatheTime[i], initBreatheTime);
-    //        specialBar[i].UpdateBar(currSpecialTime[i], initSpecialTime);
-    //    }
-    //}
-
+    #region Unused methods
     //void LevelTime()
     //{
     //    cleanTime = (int)currentTime;
@@ -357,11 +288,21 @@ public class GameOnline : MonoBehaviourPunCallbacks
     //    }
     //}
 
-    public void Winner(bool isMaster)
-    {
-        photonView.RPC("RPCWinner", RpcTarget.All, isMaster);
-    }
 
+    //public void Restart()
+    //{
+    //    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    //}
+
+    //public void LoadMenu()
+    //{
+    //    Pause();
+    //    SceneManager.LoadScene("Main Menu");
+    //}
+
+    #endregion
+
+    #region PunRPCs
     [PunRPC]
     void RPCWinner(bool isMaster)
     {
@@ -387,22 +328,13 @@ public class GameOnline : MonoBehaviourPunCallbacks
         _lockGoal = true;
     }
 
-    //public void GameOver()
-    //{
-    //    if ((twoPlayersGame && (!player[0].gameObject.activeSelf && !player[1].gameObject.activeSelf)) || (!twoPlayersGame && !player[0].gameObject.activeSelf))
-    //    {
-    //        gameOverText.SetActive(true);
-    //    }
-    //}
-
-    //public void Restart()
-    //{
-    //    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    //}
-
-    //public void LoadMenu()
-    //{
-    //    Pause();
-    //    SceneManager.LoadScene("Main Menu");
-    //}
+    [PunRPC]
+    void RPCGameOver(bool isMaster)
+    {
+        if (isMaster == PhotonNetwork.IsMasterClient)
+        {
+            gameOverText.SetActive(true);
+        }
+    }
+    #endregion
 }

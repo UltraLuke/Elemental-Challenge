@@ -2608,6 +2608,13 @@ MonoBehaviour:
   - {fileID: 496918898}
   - {fileID: 1794837277}
   - {fileID: 192627051}
+  gameOverText: {fileID: 1989917868}
+  textHealthObject:
+  - {fileID: 635867739}
+  - {fileID: 1272298038}
+  scoreTextObject:
+  - {fileID: 104078475}
+  - {fileID: 911503916}
 --- !u!1 &581050166
 GameObject:
   m_ObjectHideFlags: 0

@@ -70,14 +70,16 @@ public class PlayerBodyOnline : MonoBehaviourPun, IPlayerBodyCallback
 
     bool _winState;
     private Action<bool> winExec;
+    private Action<bool> loseExec;
 
     public bool WinState { get => _winState; }
 
-    public void InitialSettings(GameObject bulletImage, Action<bool> winExec)
+    public void InitialSettings(GameObject bulletImage, Action<bool> winExec, Action<bool> loseExec)
     {
         this.bulletImage = bulletImage;
         this.bulletImage.SetActive(false);
         this.winExec = winExec;
+        this.loseExec = loseExec;
     }
     private void Awake()
     {
@@ -501,6 +503,7 @@ public class PlayerBodyOnline : MonoBehaviourPun, IPlayerBodyCallback
     //--------------------------------Die---------------------------------------
     public void Die()
     {
+        loseExec(PhotonNetwork.IsMasterClient);
         photonView.RPC("RPCDie", RpcTarget.All);
     }
     //===================================================== COLLISIONS =======================================================
