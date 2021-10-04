@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 
-public class GameOnline : MonoBehaviourPunCallbacks
+public class GameOnline : MonoBehaviourPunCallbacks, IPunObservable
 {
     private int index = 2;
 
@@ -47,9 +47,17 @@ public class GameOnline : MonoBehaviourPunCallbacks
     [Header("Score")]
     public GameObject[] scoreTextObject;
     private Text[] scoreText = new Text[2];
-    public static int[] score = new int[2];
+    private static int[] score = new int[2];
+
+    [Space]
+
+    [Header("Score")]
+    public string nextLevelName;
 
     public static int diffLevel;
+
+    public static int[] Score { get => score; set => score = value; }
+
     private void Awake()
     {
         diffLevel = 0;
@@ -94,8 +102,8 @@ public class GameOnline : MonoBehaviourPunCallbacks
 
         if (SceneManager.GetActiveScene().name == "Tutorial Online" || SceneManager.GetActiveScene().name == "Tutorial")
         {
-            score[0] = 0;
-            score[1] = 0;
+            Score[0] = 0;
+            Score[1] = 0;
         }
 
         gameOverText.SetActive(false);
@@ -200,6 +208,10 @@ public class GameOnline : MonoBehaviourPunCallbacks
     public void GameOver(bool isMaster)
     {
         photonView.RPC("RPCGameOver", RpcTarget.All, isMaster);
+    }
+    void LoadLevel(string name)
+    {
+        photonView.RPC("LoadNextLevel", RpcTarget.All, name);
     }
 
     public void MainSettings(bool active)
@@ -320,6 +332,10 @@ public class GameOnline : MonoBehaviourPunCallbacks
                 winText[0].SetActive(true);
         }
 
+        cmra.GetComponent<AudioSource>().PlayOneShot(cmra.GetComponent<SoundManager>().Sound(8));
+
+        Invoke("LoadNextLevel", 5f);
+
         _lockGoal = true;
     }
 
@@ -331,6 +347,7 @@ public class GameOnline : MonoBehaviourPunCallbacks
             gameOverText.SetActive(true);
         }
     }
+
     [PunRPC]
     void RPCUpdateValues()
     {
@@ -351,5 +368,35 @@ public class GameOnline : MonoBehaviourPunCallbacks
             //specialBar[i].UpdateBar(currSpecialTime[i], initSpecialTime);
         }
     }
+
+    [PunRPC]
+    void LoadNextLevel()
+    {
+        if(nextLevelName == "Main Menu")
+        {
+            PhotonNetwork.Disconnect();
+        }
+        PhotonNetwork.LoadLevel(nextLevelName);
+    }
     #endregion
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        //Estoy escribiendo?
+        if (stream.IsWriting)
+        {
+            //Escribo
+            //stream.SendNext(score);
+        }
+        else
+        {
+            //Recibo
+            //var tempScore = (int[])stream.ReceiveNext();
+
+            //if (PhotonNetwork.IsMasterClient)
+            //    score[1] = tempScore[1];
+            //else
+            //    score[0] = tempScore[0];
+        }
+    }
 }

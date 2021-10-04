@@ -91,11 +91,11 @@ public class EnemyBodyOnline : MonoBehaviourPun, IEnemyDestroyable
     {
         if (layer == 8 || layer == 10 || layer == 13)
         {
-            Game.score[0] += points;
+            GameOnline.Score[0] += points;
         }
         else if (layer == 9 || layer == 11 || layer == 22)
         {
-            Game.score[1] += points;
+            GameOnline.Score[1] += points;
         }
 
         //GameObject explode = GameObject.Instantiate(explosion);
@@ -154,6 +154,6 @@ public class EnemyBodyOnline : MonoBehaviourPun, IEnemyDestroyable
     {
         GameObject explode = GameObject.Instantiate(explosion);
         explode.transform.position = transform.position;
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }

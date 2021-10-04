@@ -107,7 +107,11 @@ public class PlayerBodyOnline : MonoBehaviourPun, IPlayerBodyCallback
     void Start()
     {
 
-        if (!photonView.IsMine) return;
+        if (!photonView.IsMine)
+        {
+            physicsStomp.enabled = false;
+            return;
+        }
 
         if (GameOnline.diffLevel == 2)
         {

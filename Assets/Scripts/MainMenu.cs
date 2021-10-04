@@ -20,6 +20,7 @@ public class MainMenu : MonoBehaviour {
     void Start()
     {
         ClickMenu(0);
+        canvasMultiplayer.SetActive(false);
     }
 
     public void ClickQuit()

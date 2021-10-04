@@ -61,14 +61,5 @@ public class Player1Online : MonoBehaviourPun, IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        //Estoy escribiendo?
-        if (stream.IsWriting)
-        {
-            //Envío
-        }
-        else
-        {
-            //Recibo
-        }
     }
 }
