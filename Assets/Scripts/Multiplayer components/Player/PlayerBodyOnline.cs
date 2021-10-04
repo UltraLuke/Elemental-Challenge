@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class PlayerBodyOnline : MonoBehaviourPun
+public class PlayerBodyOnline : MonoBehaviourPun, IPlayerBodyCallback
 {
 
-    private Rigidbody2D rb;
-    private Animator anim;
+    public Rigidbody2D rb;
+    public Animator anim;
     public GameObject die;
-    private AudioSource src;
+    public AudioSource src;
     private bool facingRight = true;
     private int playerLayer;
 
@@ -65,6 +65,7 @@ public class PlayerBodyOnline : MonoBehaviourPun
 
     //--------Camera-----------
     MainCamera mainCamera;
+    Camera camera;
 
     public bool winState;
 
@@ -76,11 +77,10 @@ public class PlayerBodyOnline : MonoBehaviourPun
     }
     private void Awake()
     {
-        if (!photonView.IsMine) return;
 
-        rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
-        src = GetComponent<AudioSource>();
+        //rb = GetComponent<Rigidbody2D>();
+        //anim = GetComponent<Animator>();
+        //src = GetComponent<AudioSource>();
         cNormal = GetComponent<SpriteRenderer>();
         physicsSelf = GetComponent<Collider2D>();
         physicMelee = transform.GetChild(0).GetComponent<Collider2D>();
@@ -92,10 +92,13 @@ public class PlayerBodyOnline : MonoBehaviourPun
         if (playerLayer == 8)
             physicsSpin = transform.GetChild(3).GetComponent<Collider2D>();
 
-        mainCamera = Camera.main.GetComponent<MainCamera>();
+        if (!photonView.IsMine) return;
+
+        camera = Camera.main;
+        mainCamera = camera.GetComponent<MainCamera>();
         mainCamera.mainPlayer = gameObject;
     }
-    void Start ()
+    void Start()
     {
 
         if (!photonView.IsMine) return;
@@ -141,13 +144,13 @@ public class PlayerBodyOnline : MonoBehaviourPun
             anim.SetBool("attacking", false);
         }
 
-        if(multiShootTime > 0)
+        if (multiShootTime > 0)
         {
             multiShootTime -= Time.deltaTime;
         }
         else
         {
-            if(bulletImage != null)
+            if (bulletImage != null)
                 bulletImage.SetActive(false);
         }
 
@@ -162,16 +165,16 @@ public class PlayerBodyOnline : MonoBehaviourPun
         {
             shooting = false;
 
-            if(playerLayer == 8)
+            if (playerLayer == 8)
                 anim.SetBool("shooting", false);
         }
 
-        if(specialTimer > 0)
+        if (specialTimer > 0)
         {
             specialTimer -= Time.deltaTime;
         }
 
-        if(invincibilityTimer > 0)
+        if (invincibilityTimer > 0)
         {
             invincibilityTimer -= Time.deltaTime;
         }
@@ -192,7 +195,7 @@ public class PlayerBodyOnline : MonoBehaviourPun
         moveSpeed.y = rb.velocity.y;
 
         //Si se esta atacando o disparando en tierra, se detiene. De lo contrario, seguira moviendose
-        if(rb.velocity.y == 0 && (attacking || shooting))
+        if (rb.velocity.y == 0 && (attacking || shooting))
             rb.velocity = new Vector2(0, rb.velocity.y);
         else
             rb.velocity = moveSpeed;
@@ -206,7 +209,7 @@ public class PlayerBodyOnline : MonoBehaviourPun
         //Si no esta atacando o disparando en tierra, reproduce la animacion Idle
         if (moveSpeed.y == 0 && !attacking && !shooting)
         {
-            anim.Play("Ground");
+            PlayAnimation("Ground");
 
             if (playerLayer == 8)
                 SpinJump(false);
@@ -232,29 +235,29 @@ public class PlayerBodyOnline : MonoBehaviourPun
 
             if (specialTimer <= 0)
             {
-                anim.Play("Jump");
-                src.PlayOneShot(Camera.main.GetComponent<SoundManager>().Sound(0));
+                PlayAnimation("Jump");
+                PlaySound(camera.GetComponent<SoundManager>().Sound(0));
             }
             else
             {
-                anim.Play("Spin Jump");
+                PlayAnimation("Spin Jump");
                 SpinJump(true);
-                src.PlayOneShot(Camera.main.GetComponent<SoundManager>().Sound(0));
+                PlaySound(camera.GetComponent<SoundManager>().Sound(0));
             }
-            
+
         }
     }
 
     public void Jump2()
     {
-        if(rb.velocity.y == 0 && !(attacking || shooting))
+        if (rb.velocity.y == 0 && !(attacking || shooting))
         {
             Impulse(jumpForce);
 
-            anim.Play("Jump");
-            src.PlayOneShot(Camera.main.GetComponent<SoundManager>().Sound(0));
+            PlayAnimation("Jump");
+            PlaySound(camera.GetComponent<SoundManager>().Sound(0));
         }
-        else if(specialTimer > 0 && rb.velocity.y != 0 && !(attacking || shooting))
+        else if (specialTimer > 0 && rb.velocity.y != 0 && !(attacking || shooting))
         {
             Impulse(5);
             FlyJump(true);
@@ -275,19 +278,19 @@ public class PlayerBodyOnline : MonoBehaviourPun
                 //Si esta en tierra, usa una animacion. Si esta en aire usa otra
                 if (rb.velocity.y == 0)
                 {
-                    anim.Play("Attack");
-                    src.PlayOneShot(Camera.main.GetComponent<SoundManager>().Sound(16));
+                    PlayAnimation("Attack");
+                    PlaySound(camera.GetComponent<SoundManager>().Sound(16));
                 }
                 else
                 {
-                    anim.Play("Air Attack");
-                    src.PlayOneShot(Camera.main.GetComponent<SoundManager>().Sound(17));
+                    PlayAnimation("Air Attack");
+                    PlaySound(camera.GetComponent<SoundManager>().Sound(17));
                 }
             }
-            else if(playerLayer == 9)
+            else if (playerLayer == 9)
             {
-                anim.Play("Attack");
-                src.PlayOneShot(Camera.main.GetComponent<SoundManager>().Sound(20));
+                PlayAnimation("Attack");
+                PlaySound(camera.GetComponent<SoundManager>().Sound(20));
             }
 
             //Activa Timer de ataque
@@ -310,19 +313,19 @@ public class PlayerBodyOnline : MonoBehaviourPun
                     anim.SetBool("shooting", true);
                     if (rb.velocity.y == 0)
                     {
-                        anim.Play("Ground Shoot");
+                        PlayAnimation("Ground Shoot");
                     }
                     if (rb.velocity.y != 0)
                     {
                         anim.SetBool("attacking", true);
-                        anim.Play("Air Attack");
-                        src.PlayOneShot(Camera.main.GetComponent<SoundManager>().Sound(17));
+                        PlayAnimation("Air Attack");
+                        PlaySound(camera.GetComponent<SoundManager>().Sound(17));
                     }
                 }
                 else if (playerLayer == 9)
                 {
                     anim.SetBool("attacking", true);
-                    anim.Play("Attack");
+                    PlayAnimation("Attack");
                     attacking = true;
                     attackTimer = attackCd;
                 }
@@ -341,7 +344,7 @@ public class PlayerBodyOnline : MonoBehaviourPun
                 playerBullet.transform.position = transform.position + correction;
                 playerBullet.transform.right = transform.right;
 
-                src.PlayOneShot(Camera.main.GetComponent<SoundManager>().Sound(playerLayer + 1));
+                PlaySound(camera.GetComponent<SoundManager>().Sound(playerLayer + 1));
             }
         }
     }
@@ -349,6 +352,8 @@ public class PlayerBodyOnline : MonoBehaviourPun
     /*--------------------------Damage---------------------------*/
     public void Damage(bool takeHp)
     {
+        if (!photonView.IsMine) return;
+
         if (physicsSelf.enabled || physicsSpin.enabled)
         {
             if (takeHp)
@@ -363,14 +368,16 @@ public class PlayerBodyOnline : MonoBehaviourPun
             {
                 FlyJump(false);
                 physicsStomp.enabled = false;
-                anim.Play("Hit");
 
-                if(takeHp)
-                    src.PlayOneShot(Camera.main.GetComponent<SoundManager>().Sound(4));
+                if (takeHp)
+                    PlaySound(camera.GetComponent<SoundManager>().Sound(4));
                 else
-                    src.PlayOneShot(Camera.main.GetComponent<SoundManager>().Sound(21));
+                    PlaySound(camera.GetComponent<SoundManager>().Sound(21));
 
-                StartCoroutine(HitBlink(15));
+                //PlayAnimation("Hit");
+                //StartCoroutine(HitBlink(15));
+                RPCHit();
+                photonView.RPC("RPCHit", RpcTarget.Others);
             }
             else
             {
@@ -381,11 +388,28 @@ public class PlayerBodyOnline : MonoBehaviourPun
 
     //===================================================== OTHER FUNCTIONS ==================================================
 
+    //--------------------------Playing sound --------------------------
+    void PlaySound(AudioClip clip)
+    {
+        src.PlayOneShot(clip);
+        //photonView.RPC("RPCPlaySound", RpcTarget.Others, clip);
+    }
+
+    //--------------------------Playing animation--------------------------
+
+    void PlayAnimation(string name)
+    {
+        anim.Play(name);
+        photonView.RPC("RPCPlayAnimation", RpcTarget.Others, name);
+    }
+
     //--------------------------Facing Character--------------------------
+
     public void FlipCharacterX()
     {
         transform.Rotate(new Vector3(0, 180, 0));
         facingRight = !facingRight;
+        photonView.RPC("RPCFlipCharacterX", RpcTarget.OthersBuffered);
     }
 
     //--------------------------Impulse-----------------------------------
@@ -398,6 +422,8 @@ public class PlayerBodyOnline : MonoBehaviourPun
     //--------------------------Water Settings----------------------------
     public void WaterSettings(bool isInWater)
     {
+        if (!photonView.IsMine) return;
+
         if (isInWater)
         {
             rb.drag = 6;
@@ -406,7 +432,7 @@ public class PlayerBodyOnline : MonoBehaviourPun
             breathe -= Time.deltaTime;
             flyAnimation = "Swim";
 
-            if(breathe <= 0)
+            if (breathe <= 0)
                 Die();
         }
         else
@@ -439,11 +465,11 @@ public class PlayerBodyOnline : MonoBehaviourPun
     //--------------------------Fly Jump---------------------------------
     public void FlyJump(bool isEnabled)
     {
-        if(isEnabled)
+        if (isEnabled)
         {
             rb.gravityScale = 0.75f;
             anim.SetBool("flying", true);
-            anim.Play(flyAnimation);
+            PlayAnimation(flyAnimation);
         }
         else
         {
@@ -471,15 +497,19 @@ public class PlayerBodyOnline : MonoBehaviourPun
     //--------------------------------Die---------------------------------------
     public void Die()
     {
-        GameObject dieJump = GameObject.Instantiate(die);
-        dieJump.transform.position = transform.position;
-        gameObject.SetActive(false);
+        //GameObject dieJump = GameObject.Instantiate(die);
+        //dieJump.transform.position = transform.position;
+        //gameObject.SetActive(false);
+
+        photonView.RPC("RPCDie", RpcTarget.All);
     }
     //===================================================== COLLISIONS =======================================================
 
     //Va OnCollisionStay para recibir daño inmediatamente despues de salir del estado lastimado (cuando parpadea) si esta tocando un enemigo.
     public void OnCollisionStay2D(Collision2D collision)
     {
+        if (!photonView.IsMine) return;
+
         //Si colisiona con un enemigo
         if ((collision.gameObject.layer == 12 || collision.gameObject.layer == 15 || collision.gameObject.layer == 25) && invincibilityTimer <= 0)
         {
@@ -492,6 +522,8 @@ public class PlayerBodyOnline : MonoBehaviourPun
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
+        if (!photonView.IsMine) return;
+
         if (collision.gameObject.layer == 11 || collision.gameObject.layer == 10)
         {
             Damage(false);
@@ -506,45 +538,45 @@ public class PlayerBodyOnline : MonoBehaviourPun
         {
             Destroy(collision.gameObject);
             Impulse(35);
-            src.PlayOneShot(Camera.main.GetComponent<SoundManager>().Sound(5));
+            PlaySound(camera.GetComponent<SoundManager>().Sound(5));
         }
 
         if (collision.gameObject.tag == "Health")
         {
             Destroy(collision.gameObject);
             hP++;
-            src.PlayOneShot(Camera.main.GetComponent<SoundManager>().Sound(7));
+            PlaySound(camera.GetComponent<SoundManager>().Sound(7));
         }
 
         if (collision.gameObject.tag == "Time")
         {
             Destroy(collision.gameObject);
             Game.currentTime = Game.currentTime + 20;
-            src.PlayOneShot(Camera.main.GetComponent<SoundManager>().Sound(6));
+            PlaySound(camera.GetComponent<SoundManager>().Sound(6));
         }
 
         if (collision.gameObject.tag == "Special")
         {
             Destroy(collision.gameObject);
             specialTimer = specialSetTime;
-            src.PlayOneShot(Camera.main.GetComponent<SoundManager>().Sound(11));
+            PlaySound(camera.GetComponent<SoundManager>().Sound(11));
         }
 
-        if(collision.gameObject.tag == "Fast Shoots")
+        if (collision.gameObject.tag == "Fast Shoots")
         {
             Destroy(collision.gameObject);
             shootTimer = 0f;
             multiShootTime = 10f;
-            if(bulletImage != null) bulletImage.SetActive(true);
-            src.PlayOneShot(Camera.main.GetComponent<SoundManager>().Sound(11));
+            if (bulletImage != null) bulletImage.SetActive(true);
+            PlaySound(camera.GetComponent<SoundManager>().Sound(11));
         }
 
-        if(collision.gameObject.tag == "Invincibility")
+        if (collision.gameObject.tag == "Invincibility")
         {
             Destroy(collision.gameObject);
             invincibilityTimer = invincibilitySetTime;
             shield.SetActive(true);
-            src.PlayOneShot(Camera.main.GetComponent<SoundManager>().Sound(22));
+            PlaySound(camera.GetComponent<SoundManager>().Sound(22));
         }
 
         if (collision.gameObject.layer == 17)
@@ -554,7 +586,9 @@ public class PlayerBodyOnline : MonoBehaviourPun
     }
 
     public void OnTriggerStay2D(Collider2D collision)
-    { 
+    {
+        if (!photonView.IsMine) return;
+
         if (collision.gameObject.layer == 14 && invincibilityTimer <= 0)
         {
             if (!hurtState)
@@ -562,7 +596,7 @@ public class PlayerBodyOnline : MonoBehaviourPun
                 Damage(true);
             }
         }
-        
+
         //Mientras este sumergido en agua
         if (collision.gameObject.layer == 4)
         {
@@ -572,10 +606,43 @@ public class PlayerBodyOnline : MonoBehaviourPun
 
     public void OnTriggerExit2D(Collider2D collision)
     {
+        if (!photonView.IsMine) return;
         //Cuando sale del agua
         if (collision.gameObject.layer == 4)
         {
             WaterSettings(false);
         }
+    }
+
+    //==================== RPCs ==============================
+
+    [PunRPC]
+    void RPCFlipCharacterX()
+    {
+        transform.Rotate(new Vector3(0, 180, 0));
+        facingRight = !facingRight;
+    }
+    [PunRPC]
+    void RPCPlaySound(AudioClip clip)
+    {
+        src.PlayOneShot(clip);
+    }
+    [PunRPC]
+    void RPCPlayAnimation(string name)
+    {
+        anim.Play(name);
+    }
+    [PunRPC]
+    void RPCDie()
+    {
+        GameObject dieJump = GameObject.Instantiate(die);
+        dieJump.transform.position = transform.position;
+        gameObject.SetActive(false);
+    }
+    [PunRPC]
+    void RPCHit()
+    {
+        anim.Play("Hit");
+        StartCoroutine(HitBlink(15));
     }
 }

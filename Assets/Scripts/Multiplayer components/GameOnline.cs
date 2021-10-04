@@ -48,6 +48,9 @@ public class GameOnline : MonoBehaviourPunCallbacks
         //    }
         //}
 
+        Debug.Log(PlayerSettings.charactersSelected[0]);
+        Debug.Log(PlayerSettings.charactersSelected[1]);
+
         GameObject player;
 
         if (PhotonNetwork.IsMasterClient)

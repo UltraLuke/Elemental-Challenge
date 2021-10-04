@@ -7,11 +7,11 @@ public class Player2Online : MonoBehaviourPun, IPunObservable
 {
 
     public PlayerBodyOnline playerBody;
-    private string axis = "Horizontal2";
-    private string axisJoy = "HorizontalStick2";
-    private string jump = "Jump2";
-    private string attack = "Attack2";
-    private string fire = "Fire2";
+    public string axis = "Horizontal1";
+    public string axisJoy = "HorizontalStick1";
+    public string jump = "Jump1";
+    public string attack = "Attack1";
+    public string fire = "Fire1";
 
     public bool specialActive;
     public bool isPaused;

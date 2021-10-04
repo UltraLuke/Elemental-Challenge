@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerBody : MonoBehaviour {
+public class PlayerBody : MonoBehaviour, IPlayerBodyCallback {
 
     private Rigidbody2D rb;
     private Animator anim;

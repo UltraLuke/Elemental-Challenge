@@ -23,8 +23,8 @@ public class Stomp : MonoBehaviour {
         {
             rbParent.velocity = Vector2.zero;
             rbParent.AddForce(Vector2.up * 15, ForceMode2D.Impulse);
-            collision.gameObject.GetComponent<EnemyBody>().DestroySelf(transform.parent.gameObject.layer);
-            transform.parent.GetComponent<PlayerBody>().FlyJump(false);
+            collision.gameObject.GetComponent<IEnemyDestroyable>().DestroySelf(transform.parent.gameObject.layer);
+            transform.parent.GetComponent<IPlayerBodyCallback>().FlyJump(false);
         }
     }
 

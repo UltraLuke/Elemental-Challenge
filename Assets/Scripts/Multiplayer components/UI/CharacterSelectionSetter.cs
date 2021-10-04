@@ -25,15 +25,9 @@ public class CharacterSelectionSetter : MonoBehaviourPunCallbacks
         else
             index = 1;
 
-        //for (int i = 0; i < charSelectors.Length; i++)
-        //{
-        //    if (i == index)
-        //        charSelectors[i].StartWithCharacter(index);
-        //}
-
         for (int i = 0; i < charSelectors.Length; i++)
         {
-            if(i == index)
+            if (i == index)
             {
                 charSelectors[index].StartWithCharacter(index, PlayerReady);
             }
@@ -45,6 +39,13 @@ public class CharacterSelectionSetter : MonoBehaviourPunCallbacks
     }
 
     void PlayerReady(bool ready, int character, bool master)
+    {
+        //photonView.RPC("NPCPlayerReady", RpcTarget.All, ready, character, master);
+        NPCPlayerReady(ready, character, master);
+    }
+
+    [PunRPC]
+    void NPCPlayerReady(bool ready, int character, bool master)
     {
         int playerNum = master ? 0 : 1;
 
@@ -59,7 +60,9 @@ public class CharacterSelectionSetter : MonoBehaviourPunCallbacks
             _charactersSelected[playerNum] = character;
         }
 
-        if(_playersReady == _maxPlayers)
+        Debug.Log(playerNum + " " + _charactersSelected[playerNum]);
+
+        if (_playersReady == _maxPlayers)
         {
             PlayerSettings.charactersSelected = _charactersSelected;
             Debug.Log("Empezar el juego");

@@ -33,7 +33,7 @@ public class Bullet : MonoBehaviour {
 
         if((gameObject.layer == 13 && other.gameObject.layer == 9) || (gameObject.layer == 22 && other.gameObject.layer == 8))
         {
-            other.GetComponent<PlayerBody>().Damage(false);
+            other.GetComponent<IPlayerBodyCallback>().Damage(false);
         }
 
         GameObject smokeInstance = GameObject.Instantiate(smoke);

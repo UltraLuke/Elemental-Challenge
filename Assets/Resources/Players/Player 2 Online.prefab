@@ -539,6 +539,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerBody: {fileID: 0}
+  axis: Horizontal1
+  axisJoy: HorizontalStick1
+  jump: Jump1
+  attack: Attack1
+  fire: Fire1
   specialActive: 0
   isPaused: 0
 --- !u!114 &3889047384840762191
@@ -553,7 +558,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70a676285c971ca42a742b9dd04d0f05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 8340483493889863689}
+  anim: {fileID: 8340483493889863690}
   die: {fileID: 1380646725858412, guid: a6e0e1241ae10e34aa27170afe1863b0, type: 3}
+  src: {fileID: 8340483493889863695}
   speedInGround: 8
   speedInWater: 5
   jumpForceAir: 22
@@ -565,8 +573,8 @@ MonoBehaviour:
   bulletImage: {fileID: 0}
   breathe: 0
   specialTimer: 0
-  physicsSelf: {fileID: 0}
-  physicsStomp: {fileID: 0}
+  physicsSelf: {fileID: 8340483493889863688}
+  physicsStomp: {fileID: 8340483493655580279}
   physicsSpin: {fileID: 0}
   hP: 0
   hurtTime: 3

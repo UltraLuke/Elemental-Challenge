@@ -6,11 +6,11 @@ using Photon.Pun;
 public class Player1Online : MonoBehaviourPun, IPunObservable
 {
     public PlayerBodyOnline playerBody;
-    private string axis = "Horizontal1";
-    private string axisJoy = "HorizontalStick1";
-    private string jump = "Jump1";
-    private string attack = "Attack1";
-    private string fire = "Fire1";
+    public string axis = "Horizontal1";
+    public string axisJoy = "HorizontalStick1";
+    public string jump = "Jump1";
+    public string attack = "Attack1";
+    public string fire = "Fire1";
 
     public bool specialActive;
     public bool isPaused;

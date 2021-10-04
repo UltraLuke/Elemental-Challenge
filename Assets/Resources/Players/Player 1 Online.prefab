@@ -822,6 +822,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerBody: {fileID: 0}
+  axis: Horizontal1
+  axisJoy: HorizontalStick1
+  jump: Jump1
+  attack: Attack1
+  fire: Fire1
   specialActive: 0
   isPaused: 0
 --- !u!114 &6642949173954336104
@@ -836,7 +841,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70a676285c971ca42a742b9dd04d0f05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 2447998828870807545}
+  anim: {fileID: 2447998828870807544}
   die: {fileID: 1686139434165512, guid: d07176b747e8708459974a25909a8441, type: 3}
+  src: {fileID: 2447998828870807547}
   speedInGround: 8
   speedInWater: 5
   jumpForceAir: 22
@@ -902,13 +910,13 @@ MonoBehaviour:
     SynchronizeType: 2
     Name: velocityX
   - Type: 4
-    SynchronizeType: 1
+    SynchronizeType: 2
     Name: attacking
   - Type: 4
-    SynchronizeType: 1
+    SynchronizeType: 2
     Name: flying
   - Type: 4
-    SynchronizeType: 1
+    SynchronizeType: 2
     Name: shooting
   m_SynchronizeLayers:
   - SynchronizeType: 2

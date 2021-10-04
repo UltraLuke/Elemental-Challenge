@@ -76,11 +76,12 @@ public class LobbyUI : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         Debug.Log("New player entered the room");
-        if (newPlayer.IsMasterClient) return;
 
+        photonView.RPC("RPCStartGame", RpcTarget.All);
+        //PlayerSettings.charactersSelected = new int[]{ 0, 1};
         //PhotonNetwork.LoadLevel("Tutorial Online");
-        RPCPlSel();
-        photonView.RPC("RPCPlSel", RpcTarget.Others);
+        //RPCPlSel();
+        //photonView.RPC("RPCPlSel", RpcTarget.Others);
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
@@ -105,5 +106,11 @@ public class LobbyUI : MonoBehaviourPunCallbacks
         searchingPlayersScreen.SetActive(false);
         waitingPlayersScreen.SetActive(false);
         onlineLobbyScreen.SetActive(false);
+    }
+    [PunRPC]
+    void RPCStartGame()
+    {
+        PlayerSettings.charactersSelected = new int[] { 0, 1 };
+        PhotonNetwork.LoadLevel("Tutorial Online");
     }
 }

@@ -47,6 +47,14 @@ MonoBehaviour:
   - RPCUpdateCharacter
   - RPCUpdateCheckMark
   - RPCReady
+  - NPCPlayerReady
+  - RPCFlipCharacterX
+  - RPCPlayAnimation
+  - RPCPlaySound
+  - RPCDestroy
+  - RPCDie
+  - RPCHit
+  - RPCStartGame
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

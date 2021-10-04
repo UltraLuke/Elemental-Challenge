@@ -17,7 +17,7 @@ public class SpinAttack : MonoBehaviour {
         {
             rbParent.velocity = Vector2.zero;
             rbParent.AddForce(Vector2.up * 15, ForceMode2D.Impulse);
-            collision.gameObject.GetComponent<EnemyBody>().DestroySelf(10);
+            collision.gameObject.GetComponent<IEnemyDestroyable>().DestroySelf(10);
         }
     }
 }
