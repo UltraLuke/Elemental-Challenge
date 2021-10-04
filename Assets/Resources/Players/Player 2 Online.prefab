@@ -579,7 +579,6 @@ MonoBehaviour:
   hP: 0
   hurtTime: 3
   invincibilitySetTime: 0
-  winState: 0
 --- !u!114 &-2239324188200264378
 MonoBehaviour:
   m_ObjectHideFlags: 0

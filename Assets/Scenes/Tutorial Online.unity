@@ -2082,7 +2082,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.972549, g: 0.1254902, b: 0, a: 1}
+  m_Color: {r: 0, g: 0.59716743, b: 0.972549, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2604,6 +2604,10 @@ MonoBehaviour:
   - {fileID: 904310097}
   - {fileID: 1224311507}
   cmra: {fileID: 778707048}
+  winText:
+  - {fileID: 496918898}
+  - {fileID: 1794837277}
+  - {fileID: 192627051}
 --- !u!1 &581050166
 GameObject:
   m_ObjectHideFlags: 0

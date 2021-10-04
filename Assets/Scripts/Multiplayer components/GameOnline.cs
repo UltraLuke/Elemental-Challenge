@@ -7,14 +7,27 @@ using Photon.Pun;
 
 public class GameOnline : MonoBehaviourPunCallbacks
 {
+
+    [Header("Players")]
     public Transform[] spawners;
-    public GameObject[] bulletImages;
+    private PlayerBodyOnline[] player = new PlayerBodyOnline[2];
     private string[] playerPrefabNames = new string[2];
+
+    [Space]
+
+    [Header("Bullet")]
+    public GameObject[] bulletImages;
 
     [Space]
 
     [Header("Cameras")]
     public MainCamera cmra;
+
+    [Space]
+
+    [Header("Win")]
+    public GameObject[] winText;
+    private bool _lockGoal = false;
 
     private void Start()
     {
@@ -66,7 +79,7 @@ public class GameOnline : MonoBehaviourPunCallbacks
 
             player = PhotonNetwork.Instantiate("Players/" + playerPrefabNames[0], spawners[0].position, Quaternion.identity);
 
-            player.GetComponent<PlayerBodyOnline>().InitialSettings(bulletImages[0]);
+            player.GetComponent<PlayerBodyOnline>().InitialSettings(bulletImages[0], Winner);
 
         }
         else
@@ -81,7 +94,7 @@ public class GameOnline : MonoBehaviourPunCallbacks
             }
             player = PhotonNetwork.Instantiate("Players/" + playerPrefabNames[1], spawners[1].position, Quaternion.identity);
 
-            player.GetComponent<PlayerBodyOnline>().InitialSettings(bulletImages[1]);
+            player.GetComponent<PlayerBodyOnline>().InitialSettings(bulletImages[1], Winner);
         }
 
         //if (photonView.IsMine)
@@ -228,21 +241,21 @@ public class GameOnline : MonoBehaviourPunCallbacks
     //    paused = false;
     //}
 
-    //void Update()
-    //{
-    //    if (Input.GetButtonDown("Pause"))
-    //    {
-    //        Pause();
-    //    }
+    void Update()
+    {
+        //if (Input.GetButtonDown("Pause"))
+        //{
+        //    Pause();
+        //}
 
-    //    ShowData();
-    //    LevelTime();
+        //ShowData();
+        //LevelTime();
 
-    //    GameOver();
+        //GameOver();
 
-    //    if (!lockGoal)
-    //        Winner();
-    //}
+        //if (!lockGoal)
+        //    Winner();
+    }
 
     //public void MainSettings(bool active)
     //{
@@ -344,30 +357,35 @@ public class GameOnline : MonoBehaviourPunCallbacks
     //    }
     //}
 
-    //public void Winner()
-    //{
-    //    if (player[0].GetComponent<PlayerBody>().winState)
-    //    {
-    //        if (twoPlayersGame)
-    //        {
-    //            winText[1].SetActive(true);
-    //        }
-    //        else
-    //        {
-    //            winText[0].SetActive(true);
-    //        }
-    //        lockGoal = true;
-    //        src.PlayOneShot(Camera.main.GetComponent<SoundManager>().Sound(8));
-    //        score[0] += 500;
-    //    }
-    //    else if (player[1].GetComponent<PlayerBody>().winState)
-    //    {
-    //        winText[2].SetActive(true);
-    //        lockGoal = true;
-    //        src.PlayOneShot(Camera.main.GetComponent<SoundManager>().Sound(8));
-    //        score[1] += 500;
-    //    }
-    //}
+    public void Winner(bool isMaster)
+    {
+        photonView.RPC("RPCWinner", RpcTarget.All, isMaster);
+    }
+
+    [PunRPC]
+    void RPCWinner(bool isMaster)
+    {
+        if (_lockGoal) return;
+
+        Debug.Log(isMaster + " - " + photonView.IsMine);
+
+        if (isMaster)
+        {
+            if (PhotonNetwork.IsMasterClient)
+                winText[0].SetActive(true);
+            else
+                winText[1].SetActive(true);
+        }
+        else
+        {
+            if (PhotonNetwork.IsMasterClient)
+                winText[2].SetActive(true);
+            else
+                winText[0].SetActive(true);
+        }
+
+        _lockGoal = true;
+    }
 
     //public void GameOver()
     //{

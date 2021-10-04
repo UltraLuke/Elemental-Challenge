@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using System;
 
 public class PlayerBodyOnline : MonoBehaviourPun, IPlayerBodyCallback
 {
@@ -67,13 +68,16 @@ public class PlayerBodyOnline : MonoBehaviourPun, IPlayerBodyCallback
     MainCamera mainCamera;
     Camera camera;
 
-    public bool winState;
+    bool _winState;
+    private Action<bool> winExec;
 
-    public void InitialSettings(GameObject bulletImage)
+    public bool WinState { get => _winState; }
+
+    public void InitialSettings(GameObject bulletImage, Action<bool> winExec)
     {
         this.bulletImage = bulletImage;
         this.bulletImage.SetActive(false);
-
+        this.winExec = winExec;
     }
     private void Awake()
     {
@@ -121,7 +125,7 @@ public class PlayerBodyOnline : MonoBehaviourPun, IPlayerBodyCallback
 
         flyAnimation = "Fly";
 
-        winState = false;
+        _winState = false;
         multiShootTime = 0f;
 
         invincibilityTimer = 0f;
@@ -497,10 +501,6 @@ public class PlayerBodyOnline : MonoBehaviourPun, IPlayerBodyCallback
     //--------------------------------Die---------------------------------------
     public void Die()
     {
-        //GameObject dieJump = GameObject.Instantiate(die);
-        //dieJump.transform.position = transform.position;
-        //gameObject.SetActive(false);
-
         photonView.RPC("RPCDie", RpcTarget.All);
     }
     //===================================================== COLLISIONS =======================================================
@@ -531,7 +531,8 @@ public class PlayerBodyOnline : MonoBehaviourPun, IPlayerBodyCallback
 
         if (collision.gameObject.layer == 16)
         {
-            winState = true;
+            //_winState = true;
+            winExec(PhotonNetwork.IsMasterClient);
         }
 
         if (collision.gameObject.tag == "Jump")
