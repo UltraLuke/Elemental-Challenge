@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 
-public class GameOnline : MonoBehaviourPunCallbacks, IPunObservable
+public class GameOnline : MonoBehaviourPun, IPunObservable
 {
     private int index = 2;
 

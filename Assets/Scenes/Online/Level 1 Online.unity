@@ -1420,7 +1420,7 @@ MonoBehaviour:
   scoreTextObject:
   - {fileID: 104078475}
   - {fileID: 911503916}
-  nextLevelName: Main Menu
+  nextLevelName: Level 2 Online
 --- !u!4 &231393936
 Transform:
   m_ObjectHideFlags: 0
