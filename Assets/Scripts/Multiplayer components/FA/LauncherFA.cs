@@ -9,6 +9,8 @@ public class LauncherFA : MonoBehaviourPunCallbacks
     public MyServer serverPrefab;
     public ControllerFA controllerPrefab;
 
+    public GameObject mainScreen, connectedScreen;
+
     public void BtcConnect()
     {
         PhotonNetwork.ConnectUsingSettings();

@@ -11,9 +11,9 @@ public class MyServer : MonoBehaviourPun
     Player _server; //Referencia del Host Real (y no de los avatares)
 
     //Prefab del Model a instanciar cuando se conecte un jugador
-    //public CharacterFA characterPrefab;
+    public CharacterFA characterPrefab;
 
-    //Dictionary<Player, CharacterFA> _dicModels = new Dictionary<Player, CharacterFA>();
+    Dictionary<Player, CharacterFA> _dicModels = new Dictionary<Player, CharacterFA>();
 
     public int PackagePerSecond { get; private set; }
 
@@ -45,9 +45,6 @@ public class MyServer : MonoBehaviourPun
 
         PackagePerSecond = 60;
 
-        //CAMBIARLO POR CAMBIO DE PANTALLA EN MENU
-        //PhotonNetwork.LoadLevel(sceneIndex);
-
         var playerLocal = PhotonNetwork.LocalPlayer;
 
         if(playerLocal != _server)
@@ -60,20 +57,10 @@ public class MyServer : MonoBehaviourPun
     void AddPlayer(Player player)
     {
         //START COROUTINE
-        StartCoroutine(WaitForLevel(player));
-    }
+        CharacterFA newCharacter = PhotonNetwork.Instantiate(characterPrefab.name, Vector3.zero, Quaternion.identity).GetComponent<CharacterFA>();
+        _dicModels.Add(player, newCharacter);
 
-    IEnumerator WaitForLevel(Player player)
-    {
-        //while (PhotonNetwork.LevelLoadingProgress > .9f)
-        //{
-        //    yield return new WaitForEndOfFrame();
-        //}
 
-        //CharacterFA newCharacter = PhotonNetwork.Instantiate(characterPrefab.name, Vector3.zero, Quaternion.identity).GetComponent<CharacterFA>();
-
-        //_dicModels.Add(player, newCharacter);
-        yield return new WaitForEndOfFrame();
     }
 
     #region REQUESTS (SERVERS AVATARES)
@@ -92,10 +79,10 @@ public class MyServer : MonoBehaviourPun
     void Move(Player player, Vector3 dir)
     {
 
-        //if (_dicModels.ContainsKey(player))
-        //{
-        //    _dicModels[player].Move(dir);
-        //}
+        if (_dicModels.ContainsKey(player))
+        {
+            //_dicModels[player].Move(dir);
+        }
     }
 
     #endregion
